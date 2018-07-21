@@ -145,8 +145,20 @@ class BurgerBuilder extends Component {
     //     });
     //     console.log(error);
     //   });
+    const queryParams = [];
+    for (let i in this.state.ingredients) {
+      queryParams.push(
+        encodeURIComponent(i) +
+          "=" +
+          encodeURIComponent(this.state.ingredients[i])
+      );
+    }
 
-    this.props.history.push('/checkout');
+    const queryString = queryParams.join('&');
+    this.props.history.push({
+      pathname: "/checkout",
+      search: '?' + queryString
+    });
   };
 
   render() {
@@ -160,7 +172,13 @@ class BurgerBuilder extends Component {
 
     let orderSummary = null;
 
-    let burger = this.state.error ? <p><strong>Ingredients can't be loaded!</strong></p> : <Spinner />;
+    let burger = this.state.error ? (
+      <p>
+        <strong>Ingredients can't be loaded!</strong>
+      </p>
+    ) : (
+      <Spinner />
+    );
 
     if (this.state.ingredients) {
       burger = (
